@@ -75,7 +75,7 @@ When the pointer moves beyond an edge, it automatically wraps around to the oppo
 
 ---
 
-## Example
+## Hello world (left - right)
 
 ```
 inc"36
@@ -129,7 +129,32 @@ Hello, World!
 ```
 
 ---
+## ABCDE (left-rigth, up-down)
+```
+inc"65
+=
 
+rgt
+inc"66
+=
+
+dwn
+inc"67
+=
+
+lft
+inc"68
+=
+
+up
+inc"69
+=
+```
+Output
+```
+ABCDE
+```
+---
 ## Building
 
 Compile the interpreter using GCC.
