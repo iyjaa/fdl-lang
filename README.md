@@ -1,3 +1,7 @@
+![License](https://img.shields.io/badge/license-MIT-green)
+![Language](https://img.shields.io/badge/language-C-blue)
+![Status](https://img.shields.io/badge/status-Active%20Development-orange)
+
 # Flat Dimensional Language (FDL)
 
 > A Brainfuck-inspired esoteric programming language with a two-dimensional memory model.
