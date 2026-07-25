@@ -15,7 +15,20 @@ The project is split into two layers:
 
 | | Purpose |
 |---|---|
-| **[eso-fdl](./eso-fdl/)** ([`eso-fdl.c`](./eso-fdl/eso-fdl.c), [`SPESIFIKASI.md`](./eso-fdl/SPESIFIKASI.md)) | The frozen esoteric core (v1.0). Minimal, deterministic, spec-locked. This is "FDL" in the classic Brainfuck-derivative sense. |
+| **[eso-fdl](./eso-fdl/)** ([`eso-fdl.c`](./eso-fdl/eso-fdl.c), [`SPESIFIKASI.md`](./eso-fdl/SPESIFIKASI.md), ### Errata
+
+[`fdl-project/eso-fdl/ERRATA.md`](fdl-project/eso-fdl/ERRATA.md) documents
+five points where the reference interpreter's actual behavior is
+undocumented, ambiguous, or contradicts SPESIFIKASI.md v1.0 as written
+(case-insensitivity, suffix-chain sign rules, mandatory `-` separators
+in chained suffixes, silent token truncation past 64 chars, and `==`
+behavior at EOF). Every claim in the errata is verified against the
+actual binary by [`tests/run_tests.sh`](fdl-project/eso-fdl/tests/run_tests.sh).
+
+```
+cd fdl-project/eso-fdl
+bash tests/run_tests.sh
+```) | The frozen esoteric core (v1.0). Minimal, deterministic, spec-locked. This is "FDL" in the classic Brainfuck-derivative sense. |
 | **[fdl-lang](./fdl-lang/)** ([`FDL-LANG-SPEC.md`](./fdl-lang/FDL-LANG-SPEC.md)) | An ergonomic dialect built on top — named variables, automatic pointer navigation, loops with names instead of raw `/+ -/`. Compiles down to eso-fdl; the eso-fdl interpreter is the only thing that ever actually executes. |
 
 If you want the pure esolang experience (or you're golfing, or
