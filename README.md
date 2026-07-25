@@ -251,7 +251,7 @@ fdl/
 - [x] eso-fdl spec frozen at v1.0
 - [x] Source-line error reporting
 - [x] eso-fdl spec clarified at v1.0.1 (see ERRATA.md; no behavior changed)
-- [ ] fdl-lang specification v0.1 (draft complete, see `fdl-lang/FDL-LANG-SPEC.md`)
+- [x] fdl-lang specification v0.1 (draft complete, see `fdl-lang/FDL-LANG-SPEC.md`)
 - [ ] fdl-lang compiler (`fdlc`)
 - [ ] Optimizer
 - [ ] Debugger / grid visualizer
