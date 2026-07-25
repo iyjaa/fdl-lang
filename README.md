@@ -73,15 +73,55 @@ When the pointer moves beyond an edge, it automatically wraps around to the oppo
 
 ## Example
 
-```fdl
+```
 inc"36
 =
+rgt
+inc'51
+=
+rgt
+inc"54
+=
+rgt
+inc"54
+=
+rgt
+inc'56
+=
+rgt
+inc"22
+=
+rgt
+inc"16
+=
+rgt
+inc'44
+=
+rgt
+inc'56
+=
+rgt
+inc"57
+=
+rgt
+inc"54
+=
+rgt
+inc"50
+=
+rgt
+inc'17
+=
+rgt
+inc"5
+=
+
 ```
 
 Output
 
 ```
-H
+Hello, World!
 ```
 
 ---
