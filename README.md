@@ -1,45 +1,75 @@
-# fdl-lang
-Flat Dimensional Language (FDL): A Brainfuck-derived esoteric programming language with a 2D memory model.
 # Flat Dimensional Language (FDL)
 
-Flat Dimensional Language (FDL) is an esoteric programming language created by Izra.
+> A Brainfuck-inspired esoteric programming language with a two-dimensional memory model.
 
-FDL is inspired by Brainfuck and is fully Turing-complete while introducing a two-dimensional memory model and a compact repetition syntax.
+FDL (Flat Dimensional Language) is an esoteric programming language created by **Izra**. Inspired by Brainfuck, FDL extends the traditional one-dimensional tape into a **200×200 two-dimensional memory grid**, allowing movement in four directions while remaining fully **Turing-complete**.
+
+FDL is designed to stay minimal, deterministic, and easy to implement while introducing new possibilities for memory navigation.
+
+---
+
+## Why FDL?
+
+Unlike Brainfuck's linear tape, FDL provides a flat memory space where programs can move:
+
+- Left
+- Right
+- Up
+- Down
+
+This allows algorithms to organize memory spatially instead of sequentially.
+
+---
 
 ## Features
 
-- 200×200 two-dimensional memory grid
+- 200×200 two-dimensional memory grid (40,000 cells)
 - Four-directional pointer movement
-- Memory and pointer wrap-around
-- 8-bit cells (0–255)
+- Memory wrap-around
+- Pointer wrap-around
+- Unsigned 8-bit cells (0–255)
 - Compact repetition syntax
-- Case-insensitive keywords
-- Brainfuck-equivalent computational power
+- Case-insensitive instructions
+- Fully Turing-complete
+- Lightweight interpreter written in C
+
+---
 
 ## Memory Model
 
-FDL uses a 200×200 grid (40,000 cells).
+The memory consists of a fixed **200×200** grid.
 
-Each cell stores an unsigned 8-bit integer (0–255).
+```
+(0,0) ─────────────► X
+  │
+  │
+  │
+  ▼
+  Y
+```
 
-The memory pointer starts at the top-left corner `(0,0)`.
+Every cell stores an unsigned 8-bit integer.
 
-Pointers wrap around when moving beyond the grid boundaries.
+When the pointer moves beyond an edge, it automatically wraps around to the opposite side.
 
-## Instructions
+---
+
+## Instruction Set
 
 | FDL | Brainfuck | Description |
 |-----|-----------|-------------|
-| inc | + | Increment current cell |
-| dec | - | Decrement current cell |
-| rgt | > | Move pointer right |
-| lft | < | Move pointer left |
-| up | - | Move pointer up |
-| dwn | - | Move pointer down |
-| = | . | Output character |
-| == | , | Read one character |
-| /+ | [ | Begin loop |
-| -/ | ] | End loop |
+| `inc` | `+` | Increment current cell |
+| `dec` | `-` | Decrement current cell |
+| `rgt` | `>` | Move pointer right |
+| `lft` | `<` | Move pointer left |
+| `up` | — | Move pointer up |
+| `dwn` | — | Move pointer down |
+| `=` | `.` | Output current cell as a character |
+| `==` | `,` | Read one character |
+| `/+` | `[` | Begin loop |
+| `-/` | `]` | End loop |
+
+---
 
 ## Example
 
@@ -48,39 +78,87 @@ inc"36
 =
 ```
 
-## Compilation
+Output
+
+```
+
+```
+
+---
+
+## Building
+
+Compile the interpreter using GCC.
 
 ```bash
 gcc -O2 -Wall -o fdl fdl.c
 ```
 
-## Usage
+---
+
+## Running
 
 ```bash
 ./fdl program.fdl
 ```
 
-## Project Status
+---
 
-FDL is currently under active development.
+## Project Structure
 
-The language specification may evolve before the first stable release.
+```
+fdl-lang/
+├── fdl.c
+├── README.md
+├── LICENSE
+└── examples/
+```
+
+---
+
+## Roadmap
+
+- [x] Core language specification
+- [x] Official C interpreter
+- [ ] Language specification v1.0
+- [ ] Optimizer
+- [ ] Debugger
+- [ ] Standard library
+- [ ] Syntax highlighting
+- [ ] VS Code extension
+- [ ] Playground
+- [ ] Documentation website
+
+---
 
 ## Contributing
 
 Contributions are welcome.
 
-You can help by improving:
+Areas where help is appreciated:
 
 - Documentation
 - Examples
-- Interpreter
-- Optimizations
-- Editors and IDE support
+- Interpreter improvements
+- Performance optimizations
+- Editor integrations
 - Syntax highlighting
+- Testing
 - Playground
-- Tooling
+- Developer tools
+
+Please open an Issue before implementing major changes.
+
+---
 
 ## License
 
-This project is licensed under the MIT License.
+This project is licensed under the **MIT License**.
+
+---
+
+## Author
+
+Created by **Izra**.
+
+FDL is an experimental programming language exploring two-dimensional memory navigation while preserving the minimalist philosophy of Brainfuck.
