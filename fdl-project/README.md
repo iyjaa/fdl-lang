@@ -1,7 +1,3 @@
-![License](https://img.shields.io/badge/license-MIT-green)
-![Language](https://img.shields.io/badge/language-C-blue)
-![Status](https://img.shields.io/badge/status-Active%20Development-orange)
-
 # FDL — Flat Dimensional Language
 
 > A Brainfuck-inspired esoteric programming language with a two-dimensional memory model.
@@ -14,21 +10,9 @@ directions while remaining fully **Turing-complete**.
 The project is split into two layers:
 
 | | Purpose |
-|---|---|
-| **[eso-fdl](./eso-fdl/)** ([`eso-fdl.c`](./eso-fdl/eso-fdl.c), [`SPESIFIKASI.md`](./eso-fdl/SPESIFIKASI.md),
-[`fdl-project/eso-fdl/ERRATA.md`](fdl-project/eso-fdl/ERRATA.md) documents
-five points where the reference interpreter's actual behavior is
-undocumented, ambiguous, or contradicts SPESIFIKASI.md v1.0 as written
-(case-insensitivity, suffix-chain sign rules, mandatory `-` separators
-in chained suffixes, silent token truncation past 64 chars, and `==`
-behavior at EOF). Every claim in the errata is verified against the
-actual binary by [`tests/run_tests.sh`](fdl-project/eso-fdl/tests/run_tests.sh).
-
-```
-cd fdl-project/eso-fdl
-bash tests/run_tests.sh
-```) | The frozen esoteric core (v1.0). Minimal, deterministic, spec-locked. This is "FDL" in the classic Brainfuck-derivative sense. |
-| **[fdl-lang](./fdl-lang/)** ([`FDL-LANG-SPEC.md`](./fdl-lang/FDL-LANG-SPEC.md)) | An ergonomic dialect built on top — named variables, automatic pointer navigation, loops with names instead of raw `/+ -/`. Compiles down to eso-fdl; the eso-fdl interpreter is the only thing that ever actually executes. |
+| --- | --- |
+| **[eso-fdl](https://github.com/iyjaa/fdl-lang/blob/main/fdl-project/eso-fdl)** ([`eso-fdl.c`](https://github.com/iyjaa/fdl-lang/blob/main/fdl-project/eso-fdl/eso-fdl.c), [`SPESIFIKASI.md`](https://github.com/iyjaa/fdl-lang/blob/main/fdl-project/eso-fdl/SPESIFIKASI.md), [`ERRATA.md`](https://github.com/iyjaa/fdl-lang/blob/main/fdl-project/eso-fdl/ERRATA.md)) | The frozen esoteric core (v1.0.1). Minimal, deterministic, spec-locked. This is "FDL" in the classic Brainfuck-derivative sense. |
+| **[fdl-lang](https://github.com/iyjaa/fdl-lang/blob/main/fdl-project/fdl-lang)** ([`FDL-LANG-SPEC.md`](https://github.com/iyjaa/fdl-lang/blob/main/fdl-project/fdl-lang/FDL-LANG-SPEC.md)) | An ergonomic dialect built on top — named variables, automatic pointer navigation, loops with names instead of raw `/+ -/`. Compiles down to eso-fdl; the eso-fdl interpreter is the only thing that ever actually executes. |
 
 If you want the pure esolang experience (or you're golfing, or
 exploring the minimal instruction set), use **eso-fdl** directly. If
@@ -87,18 +71,18 @@ beyond an edge, it automatically wraps around to the opposite side.
 
 ## Instruction Set (eso-fdl core)
 
-| FDL | Brainfuck | Description |
-|-----|-----------|-------------|
-| `inc` | `+` | Increment current cell |
-| `dec` | `-` | Decrement current cell |
-| `rgt` | `>` | Move pointer right |
-| `lft` | `<` | Move pointer left |
-| `up` | — | Move pointer up |
-| `dwn` | — | Move pointer down |
-| `=` | `.` | Output current cell as a character |
-| `==` | `,` | Read one character |
-| `/+` | `[` | Begin loop (jump past `-/` if current cell is 0) |
-| `-/` | `]` | End loop (jump back to `/+` if current cell is non-zero) |
+| FDL   | Brainfuck | Description                                              |
+| ----- | --------- | -------------------------------------------------------- |
+| `inc` | `+`       | Increment current cell                                   |
+| `dec` | `-`       | Decrement current cell                                   |
+| `rgt` | `>`       | Move pointer right                                       |
+| `lft` | `<`       | Move pointer left                                        |
+| `up`  | —         | Move pointer up                                          |
+| `dwn` | —         | Move pointer down                                        |
+| `=`   | `.`       | Output current cell as a character                       |
+| `==`  | `,`       | Read one character                                       |
+| `/+`  | `[`       | Begin loop (jump past `-/` if current cell is 0)         |
+| `-/`  | `]`       | End loop (jump back to `/+` if current cell is non-zero) |
 
 ### Repetition notation
 
@@ -107,7 +91,12 @@ suffix instead of being written out repeatedly:
 
 - `"N` — repeat 2×N times
 - `'N` — repeat (2×N − 1) times
-- Suffixes chain by alternating sign: `inc"15-'1` → 30 − 1 = 29 times
+- Suffixes chain left to right, separated by a literal `-` between
+  every pair of terms. The first term is positive; **every term
+  after the first is negative** (not alternating +/−/+/−):
+  `inc"15-'1` → 30 − 1 = 29 times.
+  For 3+ terms, e.g. `inc"40-'2-"3` → 80 − 3 − 6 = 71 times
+  (see [`ERRATA.md`](https://github.com/iyjaa/fdl-lang/blob/main/fdl-project/eso-fdl/ERRATA.md) for details).
 
 ### ⚠️ Tokenization rule
 
@@ -119,7 +108,8 @@ inc'1 =     ✅ two instructions
 inc'1=      ❌ syntax error — missing separator before '='
 ```
 
-Full spec: see [`eso-fdl/SPESIFIKASI.md`](./eso-fdl/SPESIFIKASI.md).
+Full spec: see [`eso-fdl/SPESIFIKASI.md`](https://github.com/iyjaa/fdl-lang/blob/main/fdl-project/eso-fdl/SPESIFIKASI.md)
+(clarifications and edge cases: [`ERRATA.md`](https://github.com/iyjaa/fdl-lang/blob/main/fdl-project/eso-fdl/ERRATA.md)).
 
 ---
 
@@ -172,6 +162,7 @@ inc"5
 ```
 
 Output:
+
 ```
 Hello, World!
 ```
@@ -196,31 +187,31 @@ inc'35
 ```
 
 Output:
+
 ```
 ABCDE
 ```
 
-More examples (including PPM image generation using loops) live in
-[`examples/`](./examples/).
+More examples (including PPM image generation using loops) live in [`examples/`](https://github.com/iyjaa/fdl-lang/blob/main/fdl-project/examples).
 
 ---
 
 ## Building
 
-```bash
+```
 gcc -O2 -Wall -o eso-fdl eso-fdl/eso-fdl.c
 ```
 
 ## Running
 
-```bash
+```
 ./eso-fdl program.fdl
 ```
 
 Output is written to stdout — redirect it if you're generating binary
 data (e.g. a PPM image):
 
-```bash
+```
 ./eso-fdl gradient.fdl > gradient.ppm
 ```
 
@@ -232,7 +223,10 @@ data (e.g. a PPM image):
 fdl/
 ├── eso-fdl/
 │   ├── eso-fdl.c
-│   └── SPESIFIKASI.md      # eso-fdl frozen spec (v1.0)
+│   ├── SPESIFIKASI.md      # eso-fdl frozen spec (v1.0.1)
+│   ├── ERRATA.md           # empirically-verified clarifications
+│   └── tests/
+│       └── run_tests.sh    # builds eso-fdl.c and verifies ERRATA.md claims
 ├── fdl-lang/
 │   └── FDL-LANG-SPEC.md    # fdl-lang draft spec
 ├── examples/
@@ -252,6 +246,7 @@ fdl/
 - [x] Official C interpreter
 - [x] eso-fdl spec frozen at v1.0
 - [x] Source-line error reporting
+- [x] eso-fdl spec clarified at v1.0.1 (see ERRATA.md; no behavior changed)
 - [ ] fdl-lang specification v0.1 (draft complete, see `fdl-lang/FDL-LANG-SPEC.md`)
 - [ ] fdl-lang compiler (`fdlc`)
 - [ ] Optimizer
