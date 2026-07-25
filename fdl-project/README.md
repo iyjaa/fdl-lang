@@ -15,8 +15,7 @@ The project is split into two layers:
 
 | | Purpose |
 |---|---|
-| **[eso-fdl](./eso-fdl/)** ([`eso-fdl.c`](./eso-fdl/eso-fdl.c), [`SPESIFIKASI.md`](./eso-fdl/SPESIFIKASI.md), ### Errata
-
+| **[eso-fdl](./eso-fdl/)** ([`eso-fdl.c`](./eso-fdl/eso-fdl.c), [`SPESIFIKASI.md`](./eso-fdl/SPESIFIKASI.md),
 [`fdl-project/eso-fdl/ERRATA.md`](fdl-project/eso-fdl/ERRATA.md) documents
 five points where the reference interpreter's actual behavior is
 undocumented, ambiguous, or contradicts SPESIFIKASI.md v1.0 as written
