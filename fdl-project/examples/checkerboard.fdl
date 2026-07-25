@@ -1,0 +1,34 @@
+# PPM header: P6\n4 4\n255\n
+inc"40 = rgt
+inc"27 = rgt
+inc"5 = rgt
+inc"26 = rgt
+inc"16 = rgt
+inc"26 = rgt
+inc"5 = rgt
+inc"25 = rgt
+inc'27 = rgt
+inc'27 = rgt
+inc"5 = rgt
+
+# 4x4 checkerboard pixel data (grayscale: R=G=B)
+# Row 0: W B W B
+inc'128 ='2 rgt
+='2 rgt
+inc'128 ='2 rgt
+='2 rgt
+# Row 1: B W B W
+='2 rgt
+inc'128 ='2 rgt
+='2 rgt
+inc'128 ='2 rgt
+# Row 2: W B W B
+inc'128 ='2 rgt
+='2 rgt
+inc'128 ='2 rgt
+='2 rgt
+# Row 3: B W B W
+='2 rgt
+inc'128 ='2 rgt
+='2 rgt
+inc'128 ='2 rgt

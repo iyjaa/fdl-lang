@@ -1,0 +1,39 @@
+# ============================================
+# gradient32.fdl
+# Generates a 32x32 grayscale horizontal gradient
+# image as a P6 PPM file, using FDL loops.
+# ============================================
+
+# ---- PPM header: "P6\n32 32\n255\n" ----
+inc"40 = rgt
+inc"27 = rgt
+inc"5 = rgt
+inc'26 = rgt
+inc"25 = rgt
+inc"16 = rgt
+inc'26 = rgt
+inc"25 = rgt
+inc"5 = rgt
+inc"25 = rgt
+inc'27 = rgt
+inc'27 = rgt
+inc"5 = rgt
+
+# ---- pixel generation ----
+# pointer is now sitting on a fresh cell: this is ROW counter (P0)
+# P0 = ROW counter, P1 (P0+1) = COL counter, P2 (P0+2) = INTENSITY
+
+inc"16
+/+
+  rgt
+  inc"16
+  /+
+    rgt
+    ='2
+    inc"4
+    lft
+    dec
+  -/
+  lft
+  dec
+-/

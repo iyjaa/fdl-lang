@@ -15,8 +15,8 @@ The project is split into two layers:
 
 | | Purpose |
 |---|---|
-| **[eso-fdl](./eso-fdl/)** | The frozen esoteric core (v1.0). Minimal, deterministic, spec-locked. This is "FDL" in the classic Brainfuck-derivative sense. |
-| **[fdl-lang](./fdl-lang/)** | An ergonomic dialect built on top — named variables, automatic pointer navigation, loops with names instead of raw `/+ -/`. Compiles down to eso-fdl; the eso-fdl interpreter is the only thing that ever actually executes. |
+| **[eso-fdl](./eso-fdl/)** ([`eso-fdl.c`](./eso-fdl/eso-fdl.c), [`SPESIFIKASI.md`](./eso-fdl/SPESIFIKASI.md)) | The frozen esoteric core (v1.0). Minimal, deterministic, spec-locked. This is "FDL" in the classic Brainfuck-derivative sense. |
+| **[fdl-lang](./fdl-lang/)** ([`FDL-LANG-SPEC.md`](./fdl-lang/FDL-LANG-SPEC.md)) | An ergonomic dialect built on top — named variables, automatic pointer navigation, loops with names instead of raw `/+ -/`. Compiles down to eso-fdl; the eso-fdl interpreter is the only thing that ever actually executes. |
 
 If you want the pure esolang experience (or you're golfing, or
 exploring the minimal instruction set), use **eso-fdl** directly. If
@@ -107,7 +107,7 @@ inc'1 =     ✅ two instructions
 inc'1=      ❌ syntax error — missing separator before '='
 ```
 
-Full spec: see [`eso-fdl/SPEC.md`](./eso-fdl/SPEC.md).
+Full spec: see [`eso-fdl/SPESIFIKASI.md`](./eso-fdl/SPESIFIKASI.md).
 
 ---
 
@@ -167,23 +167,19 @@ Hello, World!
 ### ABCDE (left-right, up-down)
 
 ```
-inc"65
+inc'33
 =
-
-rgt
-inc"66
+rgt"1
+inc"33
 =
-
-dwn
-inc"67
+dwn"1
+inc'34
 =
-
 lft
-inc"68
+inc"34
 =
-
 up
-inc"69
+inc'35
 =
 ```
 
@@ -224,13 +220,16 @@ data (e.g. a PPM image):
 fdl/
 ├── eso-fdl/
 │   ├── eso-fdl.c
-│   └── SPEC.md
+│   └── SPESIFIKASI.md      # eso-fdl frozen spec (v1.0)
 ├── fdl-lang/
-│   ├── fdlc/            # fdl-lang → eso-fdl compiler (in progress)
-│   └── SPEC.md
+│   └── FDL-LANG-SPEC.md    # fdl-lang draft spec
 ├── examples/
+│   ├── hello.fdl
+│   ├── abcde.fdl
+│   ├── checkerboard.fdl
+│   └── gradient32.fdl
 ├── README.md
-└── LICENSE
+└── LISENSI
 ```
 
 ---
@@ -241,7 +240,7 @@ fdl/
 - [x] Official C interpreter
 - [x] eso-fdl spec frozen at v1.0
 - [x] Source-line error reporting
-- [ ] fdl-lang specification v0.1 (draft complete, see `fdl-lang/SPEC.md`)
+- [ ] fdl-lang specification v0.1 (draft complete, see `fdl-lang/FDL-LANG-SPEC.md`)
 - [ ] fdl-lang compiler (`fdlc`)
 - [ ] Optimizer
 - [ ] Debugger / grid visualizer
@@ -287,212 +286,3 @@ Created by **Izra**.
 FDL is an experimental programming language exploring two-dimensional
 memory navigation while preserving the minimalist philosophy of
 Brainfuck.
-
----
-
-## Features
-
-- 200×200 two-dimensional memory grid (40,000 cells)
-- Four-directional pointer movement
-- Memory wrap-around
-- Pointer wrap-around
-- Unsigned 8-bit cells (0–255)
-- Compact repetition syntax
-- Case-insensitive instructions
-- Fully Turing-complete
-- Lightweight interpreter written in C
-
----
-
-## Memory Model
-
-The memory consists of a fixed **200×200** grid.
-
-```
-(0,0) ─────────────► X
-  │
-  │
-  │
-  ▼
-  Y
-```
-
-Every cell stores an unsigned 8-bit integer.
-
-When the pointer moves beyond an edge, it automatically wraps around to the opposite side.
-
----
-
-## Instruction Set
-
-| FDL | Brainfuck | Description |
-|-----|-----------|-------------|
-| `inc` | `+` | Increment current cell |
-| `dec` | `-` | Decrement current cell |
-| `rgt` | `>` | Move pointer right |
-| `lft` | `<` | Move pointer left |
-| `up` | — | Move pointer up |
-| `dwn` | — | Move pointer down |
-| `=` | `.` | Output current cell as a character |
-| `==` | `,` | Read one character |
-| `/+` | `[` | Begin loop |
-| `-/` | `]` | End loop |
-
----
-
-## Hello world (left - right)
-
-```
-inc"36
-=
-rgt
-inc'51
-=
-rgt
-inc"54
-=
-rgt
-inc"54
-=
-rgt
-inc'56
-=
-rgt
-inc"22
-=
-rgt
-inc"16
-=
-rgt
-inc'44
-=
-rgt
-inc'56
-=
-rgt
-inc"57
-=
-rgt
-inc"54
-=
-rgt
-inc"50
-=
-rgt
-inc'17
-=
-rgt
-inc"5
-=
-
-```
-
-Output
-
-```
-Hello, World!
-```
-
----
-## ABCDE (left-rigth, up-down)
-```
-inc"65
-=
-
-rgt
-inc"66
-=
-
-dwn
-inc"67
-=
-
-lft
-inc"68
-=
-
-up
-inc"69
-=
-```
-Output
-```
-ABCDE
-```
----
-## Building
-
-Compile the interpreter using GCC.
-
-```bash
-gcc -O2 -Wall -o fdl fdl.c
-```
-
----
-
-## Running
-
-```bash
-./fdl program.fdl
-```
-
----
-
-## Project Structure
-
-```
-fdl-lang/
-├── fdl.c
-├── README.md
-├── LICENSE
-└── examples/
-```
-
----
-
-## Roadmap
-
-- [x] Core language specification
-- [x] Official C interpreter
-- [ ] Language specification v1.0
-- [ ] Optimizer
-- [ ] Debugger
-- [ ] Standard library
-- [ ] Syntax highlighting
-- [ ] VS Code extension
-- [ ] Playground
-- [ ] Documentation website
-
----
-
-## Contributing
-
-Contributions are welcome.
-
-Areas where help is appreciated:
-
-- Documentation
-- Examples
-- Interpreter improvements
-- Performance optimizations
-- Editor integrations
-- Syntax highlighting
-- Testing
-- Playground
-- Developer tools
-
-Please open an Issue before implementing major changes.
-
----
-
-## License
-
-This project is licensed under the **MIT License**.
-
----
-
-## Author
-
-Created by **Izra**.
-
-FDL is an experimental programming language exploring two-dimensional memory navigation while preserving the minimalist philosophy of Brainfuck.

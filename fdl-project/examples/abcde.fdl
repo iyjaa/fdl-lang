@@ -1,0 +1,26 @@
+# ABCDE demo — visits 5 distinct grid cells using all 4 directions.
+# (moves use larger steps so the path never revisits a cell)
+
+# A=65 at (0,0)
+inc'33
+=
+
+rgt"1
+# B=66 at (2,0)
+inc"33
+=
+
+dwn"1
+# C=67 at (2,2)
+inc'34
+=
+
+lft
+# D=68 at (1,2)
+inc"34
+=
+
+up
+# E=69 at (1,1)
+inc'35
+=
