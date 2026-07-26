@@ -2,7 +2,7 @@
 
 **Errata version:** 1.1 — 2026-07-25
 **Verified against:** reference interpreter `eso-fdl.c`, empirically
-(see [`run_tests.sh`](run_tests.sh); all 5 checks pass
+(see [`run_tests.sh`](./run_tests.sh); all 5 checks pass
 against a clean build of the reference source).
 
 This document records the points where the behavior of the *reference
@@ -32,7 +32,7 @@ lowercase form.
 > `INC"5` — is still recognized).
 
 **Empirical check:** `InC"33` (mixed case, 2×33 = 66 repetitions)
-prints byte value 66 (`B`). See `tests/run_tests.sh` → E1.
+prints byte value 66 (`B`). See `run_tests.sh` → E1.
 
 ---
 
@@ -58,7 +58,7 @@ term after it — not an alternating +,−,+,−,... pattern.
 - Actual interpreter behavior: `+80, −3, −6` = 80 − 3 − 6 = 71
 
 Confirmed empirically: the program outputs byte value **71**, not 83.
-See `tests/run_tests.sh` → E2.
+See `run_tests.sh` → E2.
 
 > **Correction note (errata v1.1):** the original v1.0 draft of this
 > errata illustrated E2 with the example `inc"5-'2"3` — but that
@@ -102,7 +102,7 @@ FDL error: unexpected character '"' in repetition notation '"40-'2"3'
 ```
 
 Only `inc"40-'2-"3` (dash between *every* pair) parses successfully.
-See `tests/run_tests.sh` → E3.
+See `run_tests.sh` → E3.
 
 **Addition to the Repetition notation section:**
 
@@ -147,7 +147,7 @@ reinterpreting it").
 **Empirical check:** a 74-character token (`inc"` followed by 70
 digit-`1`s) runs to completion with exit code 0 and no stderr output,
 confirming silent truncation rather than an error. See
-`tests/run_tests.sh` → E4.
+`run_tests.sh` → E4.
 
 **Addition to the Errors/Limits section:**
 
@@ -174,7 +174,7 @@ grid[py][px] = (c == EOF) ? 0 : (unsigned char) c;
 ```
 
 **Empirical check:** running `==` followed by `=` with empty stdin
-prints byte value 0. See `tests/run_tests.sh` → E5.
+prints byte value 0. See `run_tests.sh` → E5.
 
 **Addition to the Instructions section, `==` row:**
 
@@ -199,6 +199,6 @@ errata document** (this one) rather than edited directly into
 SPESIFIKASI.md — unless the project decides to release a v1.0.1 that
 explicitly adds only clarifications without changing behavior.
 
-All claims above are backed by `tests/run_tests.sh`, which builds
+All claims above are backed by `run_tests.sh`, which builds
 `eso-fdl.c` fresh and asserts each behavior against the actual binary
 rather than against a reading of the source.
