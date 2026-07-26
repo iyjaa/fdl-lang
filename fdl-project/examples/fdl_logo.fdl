@@ -1,0 +1,321 @@
+# ============================================================
+# fdl_logo.fdl -- auto-generated 'FDL' text logo (5x7 dot font)
+# Image: 190x90 grayscale PPM (P5), scale=10
+# ============================================================
+
+# ---- PPM header: 'P5\n190 90\n255\n' (14 bytes) ----
+inc"40 =
+rgt inc'27 =
+rgt inc"5 =
+rgt inc'25 =
+rgt inc'29 =
+rgt inc"24 =
+rgt inc"16 =
+rgt inc'29 =
+rgt inc"24 =
+rgt inc"5 =
+rgt inc"25 =
+rgt inc'27 =
+rgt inc'27 =
+rgt inc"5 =
+
+# ---- move from header cells to row-workspace area ----
+dwn
+lft'7
+
+# ---- unit row 0: 0000000000000000000 (1 segments) ----
+inc'128
+rgt
+inc"5
+/+
+    lft'1
+    ="95
+    rgt
+    dec
+-/
+lft'1
+dwn
+
+# ---- unit row 1: 0111110111100100000 (7 segments) ----
+inc'128
+rgt
+rgt
+inc'128
+rgt
+rgt
+inc'128
+rgt
+rgt
+inc'128
+rgt
+inc"5
+/+
+    lft'4
+    ="5
+    rgt
+    ="25
+    rgt
+    ="5
+    rgt
+    ="20
+    rgt
+    ="10
+    rgt
+    ="5
+    rgt
+    ="25
+    rgt
+    dec
+-/
+lft'4
+dwn
+
+# ---- unit row 2: 0100000100010100000 (9 segments) ----
+inc'128
+rgt
+rgt
+inc'128
+rgt
+rgt
+inc'128
+rgt
+rgt
+inc'128
+rgt
+rgt
+inc'128
+rgt
+inc"5
+/+
+    lft'5
+    ="5
+    rgt
+    ="5
+    rgt
+    ="25
+    rgt
+    ="5
+    rgt
+    ="15
+    rgt
+    ="5
+    rgt
+    ="5
+    rgt
+    ="5
+    rgt
+    ="25
+    rgt
+    dec
+-/
+lft'5
+dwn
+
+# ---- unit row 3: 0100000100010100000 (9 segments) ----
+inc'128
+rgt
+rgt
+inc'128
+rgt
+rgt
+inc'128
+rgt
+rgt
+inc'128
+rgt
+rgt
+inc'128
+rgt
+inc"5
+/+
+    lft'5
+    ="5
+    rgt
+    ="5
+    rgt
+    ="25
+    rgt
+    ="5
+    rgt
+    ="15
+    rgt
+    ="5
+    rgt
+    ="5
+    rgt
+    ="5
+    rgt
+    ="25
+    rgt
+    dec
+-/
+lft'5
+dwn
+
+# ---- unit row 4: 0111100100010100000 (9 segments) ----
+inc'128
+rgt
+rgt
+inc'128
+rgt
+rgt
+inc'128
+rgt
+rgt
+inc'128
+rgt
+rgt
+inc'128
+rgt
+inc"5
+/+
+    lft'5
+    ="5
+    rgt
+    ="20
+    rgt
+    ="10
+    rgt
+    ="5
+    rgt
+    ="15
+    rgt
+    ="5
+    rgt
+    ="5
+    rgt
+    ="5
+    rgt
+    ="25
+    rgt
+    dec
+-/
+lft'5
+dwn
+
+# ---- unit row 5: 0100000100010100000 (9 segments) ----
+inc'128
+rgt
+rgt
+inc'128
+rgt
+rgt
+inc'128
+rgt
+rgt
+inc'128
+rgt
+rgt
+inc'128
+rgt
+inc"5
+/+
+    lft'5
+    ="5
+    rgt
+    ="5
+    rgt
+    ="25
+    rgt
+    ="5
+    rgt
+    ="15
+    rgt
+    ="5
+    rgt
+    ="5
+    rgt
+    ="5
+    rgt
+    ="25
+    rgt
+    dec
+-/
+lft'5
+dwn
+
+# ---- unit row 6: 0100000100010100000 (9 segments) ----
+inc'128
+rgt
+rgt
+inc'128
+rgt
+rgt
+inc'128
+rgt
+rgt
+inc'128
+rgt
+rgt
+inc'128
+rgt
+inc"5
+/+
+    lft'5
+    ="5
+    rgt
+    ="5
+    rgt
+    ="25
+    rgt
+    ="5
+    rgt
+    ="15
+    rgt
+    ="5
+    rgt
+    ="5
+    rgt
+    ="5
+    rgt
+    ="25
+    rgt
+    dec
+-/
+lft'5
+dwn
+
+# ---- unit row 7: 0100000111100111110 (7 segments) ----
+inc'128
+rgt
+rgt
+inc'128
+rgt
+rgt
+inc'128
+rgt
+rgt
+inc'128
+rgt
+inc"5
+/+
+    lft'4
+    ="5
+    rgt
+    ="5
+    rgt
+    ="25
+    rgt
+    ="20
+    rgt
+    ="10
+    rgt
+    ="25
+    rgt
+    ="5
+    rgt
+    dec
+-/
+lft'4
+dwn
+
+# ---- unit row 8: 0000000000000000000 (1 segments) ----
+inc'128
+rgt
+inc"5
+/+
+    lft'1
+    ="95
+    rgt
+    dec
+-/
