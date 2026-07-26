@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 512 512">
+
+    <defs>
+        <style>
+            .line{
+                fill:none;
+                stroke:#111111;
+                stroke-width:24;
+                stroke-linecap:round;
+                stroke-linejoin:round;
+            }
+        </style>
+    </defs>
+
+    <!-- Background -->
+    <rect width="512" height="512" rx="64" fill="#ffffff"/>
+
+    <!-- Horizontal path -->
+    <path class="line"
+          d="M120 256 H392"/>
+
+    <!-- Vertical path -->
+    <path class="line"
+          d="M256 120 V392"/>
+
+    <!-- Arrow Right -->
+    <path class="line"
+          d="M360 224 L392 256 L360 288"/>
+
+    <!-- Arrow Left -->
+    <path class="line"
+          d="M152 224 L120 256 L152 288"/>
+
+    <!-- Arrow Up -->
+    <path class="line"
+          d="M224 152 L256 120 L288 152"/>
+
+    <!-- Arrow Down -->
+    <path class="line"
+          d="M224 360 L256 392 L288 360"/>
+
+    <!-- Pointer -->
+    <circle cx="256"
+            cy="256"
+            r="34"
+            fill="#111111"/>
+
+</svg>
