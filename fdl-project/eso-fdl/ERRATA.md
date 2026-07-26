@@ -2,7 +2,7 @@
 
 **Errata version:** 1.1 — 2026-07-25
 **Verified against:** reference interpreter `eso-fdl.c`, empirically
-(see [`tests/run_tests.sh`](./fdl-project/eso-fdl/tests/run_tests.sh); all 5 checks pass
+(see [`tests/run_tests.sh`](./tests/run_tests.sh); all 5 checks pass
 against a clean build of the reference source).
 
 This document records the points where the behavior of the *reference
