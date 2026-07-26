@@ -2,6 +2,20 @@
 [![Language](https://img.shields.io/badge/language-C-blue)]()
 [![Status](https://img.shields.io/badge/status-Active%20Development-orange)]()
 
+## Status
+
+> ⏸️ **This project is currently paused.**
+>
+> The `eso-fdl.c` interpreter was upgraded (dynamic, configurable grid
+> size instead of a fixed 200×200 grid), which desynchronized it from
+> the `fdl-lang` compiler (`fdlc`) that was being built alongside it.
+> `fdlc`'s variable allocation, pointer navigation, and code generation
+> all assumed a fixed 200×200 grid, and would need to be reworked to
+> match the interpreter's new grid model before development continues.
+>
+> The `eso-fdl` interpreter itself is unaffected and works as
+> documented. Only the `fdl-lang` compiler is on hold.
+
 # FDL — Flat Dimensional Language
 
 > A Brainfuck-inspired esoteric programming language with a two-dimensional memory model.
@@ -245,6 +259,7 @@ fdl/
 - [x] Source-line error reporting
 - [x] fdl-lang specification v0.3 (draft, see `fdl-lang/FDL-LANG-SPEC.md`)
 - [ ] fdl-lang compiler (`fdlc`)
+— paused, see Status section above
 - [ ] Optimizer
 - [ ] Debugger / grid visualizer
 - [ ] Standard library
