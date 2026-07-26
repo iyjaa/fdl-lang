@@ -1,4 +1,4 @@
-# fdl-lang — Language Specification (draft v0.2)
+# fdl-lang — Language Specification (draft v0.3)
 
 fdl-lang is a higher-level dialect that **compiles down to eso-fdl
 v1.0.1**. Every fdl-lang program produces a valid eso-fdl token
@@ -12,7 +12,7 @@ Nothing in fdl-lang is "magic." Every construct below has a fixed,
 **deterministic** expansion into eso-fdl instructions: given the same
 source file, `fdlc` must always emit byte-identical output. If you're
 ever unsure what a line compiles to, you can always drop to
-`raw { ... }` and write eso-fdl by hand.
+`raw(...) { ... }` and write eso-fdl by hand.
 
 ---
 
@@ -74,12 +74,20 @@ Formally, to move from `(px, py)` to `(tx, ty)`:
 ```
 dx_rgt = (tx - px) mod 200
 dx_lft = (px - tx) mod 200
-if dx_rgt <= dx_lft: emit  rgt"<encoding of dx_rgt>"   (see §6)
-else:                emit  lft"<encoding of dx_lft>"
+if dx_rgt <= dx_lft: emit  rgt<encoding of dx_rgt>   (see §6)
+else:                emit  lft<encoding of dx_lft>
 # analogous for dwn/up on the Y axis, evaluated after X is settled
 ```
 If `dx_rgt == 0` (already aligned on that axis), no instruction for
 that axis is emitted at all.
+
+**Special case — distance of exactly 1:** navigation instructions
+never carry a suffix when the computed distance is 1. `fdlc` emits
+the bare instruction (`rgt`, `lft`, `up`, or `dwn`) with no `"`/`'`
+suffix at all; an unsuffixed instruction implicitly means "repeat
+once." This is an exception specific to navigation instructions —
+it does **not** apply to `add`/`sub`/`set`/`print xN`, which always
+use the full §6 encoding even when `N == 1`.
 
 ## 3. Setting values (deterministic, not history-dependent)
 
@@ -102,7 +110,9 @@ sub col, 1;            # dec by N, no zeroing
 ```
 
 `add`/`sub` never zero first — they navigate, then directly emit
-`inc`/`dec` with the encoded repeat count.
+`inc`/`dec` with the encoded repeat count (full §6 encoding, no
+exception for `N == 1` — the §2 navigation exception applies only to
+navigation instructions, not to `inc`/`dec`).
 
 ## 4. Cell-to-cell operations
 
@@ -144,7 +154,12 @@ Compiles to: navigate to `row`, `/+`, `<body>`, navigate to `row`
 again, `-/`. The re-navigation before `-/` is mandatory and automatic
 — the compiler always returns to the loop variable's cell after the
 body runs, **regardless of where the body left the pointer**, because
-`-/` tests whatever cell the pointer currently occupies.
+`-/` tests whatever cell the pointer currently occupies. This holds
+even when the body contains a `raw(...) { }` block (§8): the exit
+`ptr` argument of that block tells `fdlc` where the pointer ends up,
+and the loop's mandatory re-navigation back to `row` is computed from
+that stated exit position exactly as it would be from any other
+statement.
 
 ```c
 for row = 32 {
@@ -168,9 +183,9 @@ number of iterations (assuming the body doesn't itself modify `row`).
 ## 6. Repetition encoding (used by every N-repeat construct above)
 
 Whenever fdl-lang needs to emit "repeat instruction X exactly N
-times" (for `add`/`sub`'s count, `set`'s final `inc`, navigation
-distances, and `print ... xN` below), it uses this fixed encoding
-against eso-fdl's `"`/`'` suffix notation:
+times" (for `add`/`sub`'s count, `set`'s final `inc`, and `print ...
+xN` below), it uses this fixed encoding against eso-fdl's `"`/`'`
+suffix notation:
 
 - `N == 0`: the instruction is omitted entirely (no-op).
 - `N > 0` and `N` even: emit suffix `"(N/2)`.
@@ -179,7 +194,12 @@ against eso-fdl's `"`/`'` suffix notation:
 This always produces a single suffix term (never a chain) for any
 `N` in `0..=255`, keeping compiler output compact and simple to
 verify by hand. `fdlc` never emits chained suffixes (`"a-'b-...`) of
-its own accord — chains are exclusively a `raw { }` construct.
+its own accord — chains are exclusively a `raw(...) { }` construct.
+
+**Note:** navigation instructions (`rgt`/`lft`/`up`/`dwn`) also use
+this encoding for any distance `N >= 2`, but distance `N == 1` is a
+special case handled by §2 (bare instruction, no suffix) rather than
+by this rule.
 
 ## 7. I/O
 
@@ -197,34 +217,53 @@ repetition — `read ch xN` is not supported in this draft).
 ## 8. Escape hatch
 
 ```c
-raw {
+raw(ptr.this(), ptr.is(1, 0)) {
     inc"40 = rgt
 }
 ```
 
-Anything inside `raw { }` is copied to the output token stream
-**verbatim** (still eso-fdl syntax, still whitespace-delimited).
-`fdlc` does not parse, validate, or track pointer/variable state
-through the contents of a `raw` block — it is emitted as-is, and any
-syntax errors inside it are only caught later, by the eso-fdl
-interpreter itself at runtime.
+Anything inside the `{ }` of a `raw(...)` block is copied to the
+output token stream **verbatim** (still eso-fdl syntax, still
+whitespace-delimited). `fdlc` does not parse, validate, or track
+pointer/variable state through the contents of a `raw` block — it is
+emitted as-is, and any syntax errors inside it are only caught later,
+by the eso-fdl interpreter itself at runtime.
 
-Because `fdlc` cannot see into `raw { }`, its compile-time pointer
-tracking (§2) becomes **unreliable for the remainder of the file**
-after a `raw { }` block unless the block is documented by the author
-to leave the pointer at a known position. **Every `raw { }` block must
-be immediately followed by a comment stating the pointer's resulting
-`(x, y)` position**, e.g.:
+Because `fdlc` cannot see into the block body, it cannot know on its
+own where the pointer is before or after the block runs. `raw(...)`
+therefore takes **two mandatory arguments**, `raw(<entry>, <exit>) {
+...}`, each of which is one of:
+
+- `ptr.this()` — "the pointer is at whatever position the compiler
+  is currently tracking; do not move it and do not change what is
+  tracked." Used as the *entry* argument this means no navigation
+  instruction is emitted before the block. Used as the *exit*
+  argument this means the block is declared to leave the pointer
+  exactly where it was on entry.
+- `ptr.is(x, y)` — "the pointer's position is `(x, y)`." Used as the
+  *entry* argument, `fdlc` first emits ordinary navigation (§2) from
+  its currently tracked position to `(x, y)`, then emits the block's
+  verbatim body. Used as the *exit* argument, `fdlc` simply records
+  `(x, y)` as the new tracked pointer position for every statement
+  that follows the block.
+
+Example — entry uses the tracked position as-is, exit declares that
+the block moved the pointer one cell right:
 
 ```c
-raw {
+raw(ptr.this(), ptr.is(1, 0)) {
     inc"40 = rgt
 }
-# pointer now at (1, 0)
 ```
 
-`fdlc` does not verify this comment's accuracy — it is a documentation
-convention, not a checked annotation, in this draft.
+`fdlc` does **not** verify either argument against the actual
+behavior of the verbatim body — it trusts both, exactly as written,
+and resumes compile-time tracking (§2) from the stated *exit*
+position for every statement after the block. Getting the *exit*
+argument wrong will not be caught at compile time; it will silently
+desynchronize `fdlc`'s pointer tracking from the true runtime pointer,
+surfacing later as incorrect navigation in subsequent statements. The
+programmer is responsible for keeping both arguments accurate.
 
 ## 9. Comments
 
@@ -251,11 +290,17 @@ while_stmt  := "while" IDENT "{" statement* "}" ;
 for_stmt    := "for" IDENT "=" INT "{" statement* "}" ;
 print_stmt  := "print" IDENT ( "x" INT )? ";" ;
 read_stmt   := "read" IDENT ";" ;
-raw_block   := "raw" "{" <verbatim eso-fdl tokens> "}" ;
+raw_block   := "raw" "(" ptr_arg "," ptr_arg ")" "{" <verbatim eso-fdl tokens> "}" ;
+ptr_arg     := "ptr.this" "(" ")" | "ptr.is" "(" INT "," INT ")" ;
 
 IDENT       := [a-zA-Z_][a-zA-Z0-9_]* ;
-INT         := [0-9]+ ;   (* must resolve to 0..=255 *)
+INT         := [0-9]+ ;   (* must resolve to 0..=255 unless otherwise constrained, see below *)
 ```
+
+Note: the two `INT` values inside `ptr.is(x, y)` are grid coordinates
+and are constrained to `0..=199` each (not `0..=255` — see compile
+errors below), since they must address a valid cell in the 200×200
+grid.
 
 ---
 
@@ -265,17 +310,25 @@ INT         := [0-9]+ ;   (* must resolve to 0..=255 *)
 
 - reference to an undeclared variable
 - redeclaration of an already-declared variable name
-- integer literal outside `0..=255`
+- integer literal outside `0..=255` (for `var`/`set`/`add`/`sub`/`print xN` values)
 - declaring more than 39,999 variables ("grid exhausted" — recall
   index 39999 is reserved, §1)
 - `copy`/`move` with identical source and destination
 - unclosed `{` (missing matching `}`) in any block, including `raw`
+- a `raw(...)` block missing either the entry or exit `ptr` argument,
+  or supplying more or fewer than two arguments
+- `ptr.is(x, y)` with `x` or `y` outside `0..=199`
 - any statement outside of a recognized form in the grammar above
 
-`fdlc` does **not** validate the contents of `raw { }` blocks (§8);
-malformed eso-fdl inside `raw { }` will only surface as a runtime
-error from the eso-fdl interpreter, reported against the *compiled*
-`.fdl` file's line numbers, not the original `.fdl-lang` source.
+`fdlc` does **not** validate the contents of a `raw(...) { }` block's
+body (§8), nor does it verify that the block's *exit* `ptr` argument
+matches what the body actually does at runtime; malformed eso-fdl
+inside the body will only surface as a runtime error from the eso-fdl
+interpreter, reported against the *compiled* `.fdl` file's line
+numbers, not the original `.fdl-lang` source. An inaccurate *exit*
+argument will not surface as an error at all — it silently
+desynchronizes `fdlc`'s pointer tracking for the rest of the file
+(§8).
 
 ---
 
@@ -312,17 +365,12 @@ for n = 3 {
 
 `n` → `(0,0)`, `bang` → `(1,0)`. `set n = 3` navigates to `(0,0)`
 (no movement needed, already there), zeroes it, then `inc` encoded
-for 3 via §6 (`3` is odd → `'2`). `set bang = 33` navigates
-`rgt"1` (encoding of distance 1 → odd → actually `1` is odd so `'1`;
-see below), zeroes, then `inc` encoded for 33 (odd → `'17`). The
-`for` loop then re-navigates to `n`'s cell for the loop test/decrement
-each iteration and to `bang`'s cell for each `print`.
-
-*(Note: distance-1 navigation encodes as `'1` per §6, since 1 is odd
-→ `((1+1)/2) = 1` → `'1`. A single-step move is therefore written
-`rgt'1`, not `rgt"1` — implementers should double check this against
-the reference `fdlc` once it exists, as it's easy to transpose `"`
-and `'` here.)*
+for 3 via §6 (`3` is odd → `'2`). `set bang = 33` navigates one cell
+right — distance 1, so per the §2 special case this emits the bare
+instruction `rgt` (no suffix), then zeroes the cell, then `inc`
+encoded for 33 (odd → `'17`). The `for` loop then re-navigates to
+`n`'s cell for the loop test/decrement each iteration and to `bang`'s
+cell for each `print`.
 
 ---
 
@@ -355,12 +403,29 @@ rules in §2 and §6 above.
 
 ## Changelog
 
-- **v0.2** (this revision) — added lexical structure section;
-  switched statement syntax to require `;` terminators (C/Rust-style);
-  formalized the navigation determinism rule (X-then-Y, shortest
-  distance, tie→right/down) which v0.1 left unspecified; formalized
-  the §6 repetition-encoding rule used by `add`/`sub`/`set`/`print xN`
-  and by navigation distances, so that `fdlc` output is byte-for-byte
+- **v0.3** (this revision) — added a navigation-only exception:
+  distance-1 moves emit a bare `rgt`/`lft`/`up`/`dwn` with no `"`/`'`
+  suffix instead of the full §6 encoding; fixed the countdown-printer
+  worked example accordingly (`rgt'1` → `rgt`), and removed the
+  self-contradicting parenthetical note that flagged this as an open
+  issue. Replaced the v0.2 "documentation comment" convention for
+  `raw { }` pointer tracking with a mandatory, parsed `raw(entry,
+  exit) { }` syntax using `ptr.this()` / `ptr.is(x, y)` for both the
+  pointer position on entry to and on exit from a raw block; `fdlc`
+  now emits navigation instructions for a `ptr.is(x, y)` entry
+  argument and resumes tracking from the exit argument, though it
+  still does not verify the exit argument's accuracy against the raw
+  body's actual behavior. Added corresponding grammar rule (`ptr_arg`)
+  and compile errors (missing/malformed `raw()` arguments,
+  out-of-range `ptr.is` coordinates). Clarified that loop
+  re-navigation (§5) is computed from a raw block's stated exit
+  position like any other statement.
+- **v0.2** — added lexical structure section; switched statement
+  syntax to require `;` terminators (C/Rust-style); formalized the
+  navigation determinism rule (X-then-Y, shortest distance,
+  tie→right/down) which v0.1 left unspecified; formalized the §6
+  repetition-encoding rule used by `add`/`sub`/`set`/`print xN` and
+  by navigation distances, so that `fdlc` output is byte-for-byte
   deterministic; reserved a dedicated temp cell (199,199) for `copy`
   instead of an unspecified "hidden temp cell"; added compile-error
   list; added `raw { }` pointer-tracking caveat and documentation
