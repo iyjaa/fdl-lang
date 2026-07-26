@@ -1,6 +1,6 @@
-![License](https://img.shields.io/badge/license-MIT-green)
-![Language](https://img.shields.io/badge/language-C-blue)
-![Status](https://img.shields.io/badge/status-Active%20Development-orange)
+[![License](https://img.shields.io/badge/license-MIT-green)](LISENSI)
+[![Language](https://img.shields.io/badge/language-C-blue)]()
+[![Status](https://img.shields.io/badge/status-Active%20Development-orange)]()
 
 # FDL — Flat Dimensional Language
 
@@ -15,8 +15,8 @@ The project is split into two layers:
 
 | | Purpose |
 | --- | --- |
-| **[eso-fdl](https://github.com/iyjaa/fdl-lang/blob/main/fdl-project/eso-fdl)** ([`eso-fdl.c`](https://github.com/iyjaa/fdl-lang/blob/main/fdl-project/eso-fdl/eso-fdl.c), [`SPESIFIKASI.md`](https://github.com/iyjaa/fdl-lang/blob/main/fdl-project/eso-fdl/SPESIFIKASI.md), [`ERRATA.md`](https://github.com/iyjaa/fdl-lang/blob/main/fdl-project/eso-fdl/ERRATA.md)) | The frozen esoteric core (v1.0.1). Minimal, deterministic, spec-locked. This is "FDL" in the classic Brainfuck-derivative sense. |
-| **[fdl-lang](https://github.com/iyjaa/fdl-lang/blob/main/fdl-project/fdl-lang)** ([`FDL-LANG-SPEC.md`](https://github.com/iyjaa/fdl-lang/blob/main/fdl-project/fdl-lang/FDL-LANG-SPEC.md)) | An ergonomic dialect built on top — named variables, automatic pointer navigation, loops with names instead of raw `/+ -/`. Compiles down to eso-fdl; the eso-fdl interpreter is the only thing that ever actually executes. |
+| **[eso-fdl](fdl-project/eso-fdl)** ([`eso-fdl.c`](fdl-project/eso-fdl/eso-fdl.c), [`SPESIFIKASI.md`](fdl-project/eso-fdl/SPESIFIKASI.md)) | The frozen esoteric core (v1.0). Minimal, deterministic, spec-locked. This is "FDL" in the classic Brainfuck-derivative sense. |
+| **[fdl-lang](fdl-project/fdl-lang)** ([`FDL-LANG-SPEC.md`](fdl-project/fdl-lang/FDL-LANG-SPEC.md)) | An ergonomic dialect built on top — named variables, automatic pointer navigation, loops with names instead of raw `/+ -/`. Compiles down to eso-fdl; the eso-fdl interpreter is the only thing that ever actually executes. |
 
 If you want the pure esolang experience (or you're golfing, or
 exploring the minimal instruction set), use **eso-fdl** directly. If
@@ -95,12 +95,7 @@ suffix instead of being written out repeatedly:
 
 - `"N` — repeat 2×N times
 - `'N` — repeat (2×N − 1) times
-- Suffixes chain left to right, separated by a literal `-` between
-  every pair of terms. The first term is positive; **every term
-  after the first is negative** (not alternating +/−/+/−):
-  `inc"15-'1` → 30 − 1 = 29 times.
-  For 3+ terms, e.g. `inc"40-'2-"3` → 80 − 3 − 6 = 71 times
-  (see [`ERRATA.md`](https://github.com/iyjaa/fdl-lang/blob/main/fdl-project/eso-fdl/ERRATA.md) for details).
+- Suffixes chain by alternating sign: `inc"15-'1` → 30 − 1 = 29 times
 
 ### ⚠️ Tokenization rule
 
@@ -112,8 +107,7 @@ inc'1 =     ✅ two instructions
 inc'1=      ❌ syntax error — missing separator before '='
 ```
 
-Full spec: see [`eso-fdl/SPESIFIKASI.md`](https://github.com/iyjaa/fdl-lang/blob/main/fdl-project/eso-fdl/SPESIFIKASI.md)
-(clarifications and edge cases: [`ERRATA.md`](https://github.com/iyjaa/fdl-lang/blob/main/fdl-project/eso-fdl/ERRATA.md)).
+Full spec: see [`eso-fdl/SPESIFIKASI.md`](fdl-project/eso-fdl/SPESIFIKASI.md).
 
 ---
 
@@ -196,7 +190,7 @@ Output:
 ABCDE
 ```
 
-More examples (including PPM image generation using loops) live in [`examples/`](https://github.com/iyjaa/fdl-lang/blob/main/fdl-project/examples).
+More examples (including PPM image generation using loops) live in [`examples/`](fdl-project/examples).
 
 ---
 
@@ -227,12 +221,9 @@ data (e.g. a PPM image):
 fdl/
 ├── eso-fdl/
 │   ├── eso-fdl.c
-│   ├── SPESIFIKASI.md      # eso-fdl frozen spec (v1.0.1)
-│   ├── ERRATA.md           # empirically-verified clarifications
-│   └── tests/
-│       └── run_tests.sh    # builds eso-fdl.c and verifies ERRATA.md claims
+│   └── SPESIFIKASI.md      # eso-fdl frozen spec (v1.0)
 ├── fdl-lang/
-│   └── FDL-LANG-SPEC.md    # fdl-lang draft spec
+│   └── FDL-LANG-SPEC.md    # fdl-lang draft spec (v0.3)
 ├── examples/
 │   ├── hello.fdl
 │   ├── abcde.fdl
@@ -250,8 +241,7 @@ fdl/
 - [x] Official C interpreter
 - [x] eso-fdl spec frozen at v1.0
 - [x] Source-line error reporting
-- [x] eso-fdl spec clarified at v1.0.1 (see ERRATA.md; no behavior changed)
-- [x] fdl-lang specification v0.1 (draft complete, see `fdl-lang/FDL-LANG-SPEC.md`)
+- [x] fdl-lang specification v0.3 (draft, see `fdl-lang/FDL-LANG-SPEC.md`)
 - [ ] fdl-lang compiler (`fdlc`)
 - [ ] Optimizer
 - [ ] Debugger / grid visualizer
